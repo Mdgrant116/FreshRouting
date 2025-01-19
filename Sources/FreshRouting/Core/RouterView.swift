@@ -48,7 +48,7 @@ public struct RouterView<Content: View>: View, Router {
         self.content = content
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStackIfNeeded(path: $path, addNavigationView: addNavigationView) {
             content(self)
                 .sheetViewModifier(screen: $showSheet)
