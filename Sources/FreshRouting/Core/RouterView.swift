@@ -20,6 +20,8 @@ public struct RouterView<Content: View>: View, Router {
     
     @Environment(\.dismiss) private var dismiss
 
+    let tintColor: Color
+    
     @State private var path: [AnyDestination] = []
     
     @State private var showSheet: AnyDestination? = nil
@@ -39,10 +41,12 @@ public struct RouterView<Content: View>: View, Router {
     @ViewBuilder var content: (Router) -> Content
     
     public init(
+        tintColor: Color = .white,
         screenStack: (Binding<[AnyDestination]>)? = nil,
         addNavigationView: Bool = true,
         content: @escaping (Router) -> Content
     ) {
+        self.tintColor = tintColor
         self._screenStack = screenStack ?? .constant([])
         self.addNavigationView = addNavigationView
         self.content = content
@@ -55,6 +59,8 @@ public struct RouterView<Content: View>: View, Router {
                 .fullScreenCoverViewModifier(screen: $showFullScreenCover)
                 .showCustomAlert(type: alertOption, alert: $alert)
         }
+        .tint(tintColor)
+
         .modalViewModifier(backgroundColor: modalBackgroundColor, transition: modalTransition, screen: $modal)
         .environment(\.router, self)
     }
@@ -107,5 +113,23 @@ public struct RouterView<Content: View>: View, Router {
     
     public func dismissModal() {
         modal = nil
+    }
+}
+
+#Preview {
+    RouterView(tintColor: .black) { router in
+            Text("Test")
+                .navigationTitle("Poop")
+                .toolbar {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        Button("First") {
+                            print("Pressed")
+                        }
+                        
+                        Button("Second") {
+                            print("Pressed")
+                        }
+                    }
+                }
     }
 }
